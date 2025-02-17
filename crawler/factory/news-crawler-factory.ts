@@ -5,8 +5,8 @@ import { CRAWLERS } from "../constant";
 import { Kafka } from "kafkajs";
 
 const MONGO_URI = 'mongodb://localhost:27017';
-const DB_NAME = 'dantri_db';
-const COLLECTION_NAME = 'articles';
+const DB_NAME = 'news-crawler';
+const COLLECTION_NAME = 'article';
 
 export class NewsCrawlerFactory {
 
