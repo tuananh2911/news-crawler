@@ -161,6 +161,7 @@ export class VnexpressCrawler extends AbstractNewsCrawler  {
                                 stopCrawling = true;
                                 break;
                             }
+                            
                             newArticles.push({ ...article, source:uri ,parentCategory: menu.parentTitle,
                                 childCategory: child.title});
                         }
