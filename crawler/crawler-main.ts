@@ -1,4 +1,4 @@
-import { AbstractNewsCrawler } from "./new-crawlers/abstract-news-crawler";
+import { AbstractNewsCrawler } from "./crawlers/abstract-crawler";
 import { NewsCrawlerFactory } from "./factory/news-crawler-factory";
 
 export class Crawler{

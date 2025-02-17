@@ -1,27 +1,35 @@
 import { MongoClient } from "mongodb";
-import { AbstractNewsCrawler } from "../new-crawlers/abstract-news-crawler";
-import { DanTriCrawler } from "../new-crawlers/dantri-crawler";
-import { CRAWLERS } from "../constant";
+import { AbstractNewsCrawler } from "../crawlers/abstract-crawler";
+import { DanTriCrawler } from "../crawlers/dantri-crawler";
 import { Kafka } from "kafkajs";
+import { DANTRI_URI, VNEXPRESS_URI } from "../constant";
+import { VnexpressCrawler } from "../crawlers/vnexpress-crawler";
+import dotenv from 'dotenv';
 
-const MONGO_URI = 'mongodb://localhost:27017';
-const DB_NAME = 'dantri_db';
-const COLLECTION_NAME = 'articles';
-
+// Load biến môi trường
+dotenv.config();
+const MONGO_URI = process.env.MONGODB_URI|| '';
+const DB_NAME = process.env.DB_NAME;
+const COLLECTION_NAME = process.env.COLLECTION_NAME || '';
+const BROKER = process.env.KAFKA_BROKERS||''
+const CRAWLERS = new Map<string, any>([
+    [DANTRI_URI, new DanTriCrawler(DANTRI_URI)],
+    [VNEXPRESS_URI, new VnexpressCrawler(VNEXPRESS_URI)]
+]);
 export class NewsCrawlerFactory {
 
      async connectDB() {
         const client = new MongoClient(MONGO_URI);
         await client.connect();
-        console.log("✅ Đã kết nối MongoDB");
+        console.log("Đã kết nối MongoDB");
         return client.db(DB_NAME).collection(COLLECTION_NAME);
     }
     async connectKafka(){
+        
         const kafka = new Kafka({
             clientId: 'dantri-crawler',
-            brokers: ['localhost:9092'] // Thay đổi broker URL theo cấu hình của bạn
+            brokers: [BROKER] // Thay đổi broker URL theo cấu hình của bạn
         });
-        
         const producer = kafka.producer();
         return producer
     }
