@@ -2,6 +2,7 @@ import { Collection, MongoClient } from "mongodb";
 
 export abstract class AbstractNewsCrawler {
     public uri: string;
+    public producer:any;
     public collection: Collection | undefined;
     constructor(uri: string) {
         if (this.constructor === AbstractNewsCrawler) {

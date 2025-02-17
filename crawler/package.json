@@ -1,6 +1,7 @@
 {
   "type": "module",
   "dependencies": {
+    "kafkajs": "^2.2.4",
     "mongodb": "^6.13.0",
     "puppeteer": "^24.2.1"
   }

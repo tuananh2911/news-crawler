@@ -17,9 +17,33 @@ type MenuItem = {
     children: { title: string; url: string }[];
 };
 export class DanTriCrawler extends AbstractNewsCrawler  {
+
     public async getExistingArticleIds(collection: Collection) {
         const articles: any[] = await collection.find({}, { projection: { id: 1 } }).toArray();
         return new Set(articles.map(a => a.id));
+    }
+
+
+    private async disconnectProducer() {
+        await this.producer.disconnect();
+    }
+
+    private async sendToKafka(articles: Article[]) {
+        try {
+            const messages = articles.map(article => ({
+                value: JSON.stringify(article)
+            }));
+
+            await this.producer.send({
+                topic: 'article',
+                messages
+            });
+
+            console.log(`Đã gửi ${articles.length} bài viết vào Kafka topic`);
+        } catch (error) {
+            console.error('Lỗi khi gửi vào Kafka:', error);
+            throw error;
+        }
     }
 
     public async crawlWebPage(uri:string) {
@@ -106,8 +130,7 @@ export class DanTriCrawler extends AbstractNewsCrawler  {
                         }
     
                         if (newArticles.length > 0) {
-                            await collection?.insertMany(newArticles);
-                            console.log(` Đã lưu ${newArticles.length} bài viết mới từ ${child.title}`);
+                            await this.sendToKafka(newArticles);
                         }
                         
                         await childPage.close();
@@ -120,6 +143,7 @@ export class DanTriCrawler extends AbstractNewsCrawler  {
         } catch (error) {
             console.error(' Error:', error);
         } finally {
+            await this.disconnectProducer();
             await browser.close();
         }
     }
