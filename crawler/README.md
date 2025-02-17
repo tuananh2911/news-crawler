@@ -8,7 +8,6 @@ $ npm install
 ## Running the crawler
 
 ```bash
-# development
 $ pm2 start .\ecosystem.config.js
 ```
 
