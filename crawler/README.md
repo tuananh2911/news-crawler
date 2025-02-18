@@ -5,6 +5,10 @@
 $ npm install
 ```
 
+## Add environment file
+1) Change file '.env.example' to '.env'
+2) Add values ​​to environment variables ( See more in the .env file attached to the email )
+
 ## Running the crawler
 
 ```bash
@@ -25,6 +29,7 @@ module.exports = {
   }]
 }
 
-## Edit
+## Edit code and run code
+# After edit code, you need run: 
 1) Run 'tsc' to compile typescript to javascript
 2) Run "pm2 start .\ecosystem.config.js"

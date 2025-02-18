@@ -31,6 +31,10 @@
 ```bash
 $ npm install
 ```
+## Add environment file
+1) Change file '.env.example' to '.env'
+2) Add values ​​to environment variables ( See more in the .env file attached to the email )
+
 
 ## Running the app
 
